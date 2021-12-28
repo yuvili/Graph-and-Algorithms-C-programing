@@ -2,27 +2,29 @@
 #include <stdlib.h>
 #include "graph.h"
 
-node *newNde(int data, pnode prev)
+pnode newNode(int data, pnode prev)
 {
-    node *p = (node *)malloc(sizeof(node));
-    p->node_num = data;
-    p->next = NULL;
+    node p = (node)malloc(sizeof(node));
+    p.node_num = data;
+    p.next = NULL;
     prev->next = p;
-    return p;
+    pnode pp = &p;
+    return pp;
 }
 
-node *creatList(int nodeSum)
+pnode creatList(int nodeSum)
 {
-    node *head = (node *)malloc(sizeof(node)); // set the head
-    pnode prev = head;                         // pointer that keep the prev address
+    node head = (node)malloc(sizeof(node)); // set the head
+    pnode prev = &head;                         // pointer that keep the prev address
     for (int data = 1; data < nodeSum; data++)
     {
-        prev = newNde(data, prev);
+        prev = newNode(data, prev);
     }
-    return head;
+    prev = &head;
+    return prev;
 }
 
-node *serach(int data, node *head)
+pnode serach(int data, pnode head)
 {
     if (head == NULL)
     {
@@ -39,30 +41,34 @@ node *serach(int data, node *head)
     return NULL;
 }
 
-edge *creatEdge(node *from, node *to, int w)
+pedge creatEdge(pnode to, int w)
 {
-    edge *p = (edge *)malloc(sizeof(edge));
-    p->endpoint = &to;
-    p->weight = w;
-    return p;
+    edge p = (edge)malloc(sizeof(edge));
+    p.endpoint = &to;
+    p.weight = w;
+    pedge pp = &p;
+    return pp;
 }
 
 pnode build_graph_cmd(int nodeSum)
 {
-    node *head = creatList(nodeSum);
-    int dis = 0, w = 0, src = 0;
-    int count = 0;
-    while (count != nodeSum)
+    pnode head = creatList(nodeSum); //create list of all the nodes pointers 
+    pnode tmpHead = head; //build cause we don't what to change the val of the head pointer,use when you send the head ptr to other punc
+    int dis = 0, w = 0, src = 0,count = 0;
+
+    while (count != nodeSum) //while we didnt pass all the nodes
     {
         if (scanf("%d", &src))
-        {                                   //  *need to check if the head pointer change while send him to other function*
-            node *from = serach(src, head); // return the address of the src node(if exist..)
-            edge *curEdeg = NULL;
-            int firstEdge = 1;
-            pedge prev = null; //pointer to the previos edge that connected to the *same* node
+        {                                   
+            pnode from = serach(src, tmpHead); // return the address of the src node
+            tmpHead = head; //reaset the tmpHead
+            int firstEdge = 1; //indicate that its tne first edge that create
+            pedge curEdeg = NULL;
+            pedge prev = NULL; //pointer to the previos edge that connected to the *same* node
             while (scanf("%d", &dis))
             {
-                node *to = serach(dis, head);
+                pnode to = serach(dis, tmpHead);
+                tmpHead = head; //reaset the tmpHead
                 scanf("%d", &w);
                 curEdeg = creatEdge(to, w);
                 if (firstEdge)

@@ -4,7 +4,7 @@
 int main()
 {
     exist a;
-    a.bol = 0;
+    a.bool = 0;
 
     char choice;
 
@@ -12,7 +12,7 @@ int main()
     switch (choice)
     {
     case 'A':
-        if (a.bol == 0)
+        if (a.bool == 0)
         { // there isn't exist graph:
             char nodeSum;
             scanf(" %d", &nodeSum); // get the node number
@@ -21,6 +21,7 @@ int main()
         }
         else
         {
+
             // need to del all the graph by free all nodes and edges
             // build_graph_cmd();
         }

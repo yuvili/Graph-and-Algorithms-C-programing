@@ -19,7 +19,7 @@ typedef struct GRAPH_NODE_
 
 typedef struct exist_
 {
-    int bol;
+    int bool;
     struct GRAPH_NODE_ *start;
 }exist, *pexist;
 
