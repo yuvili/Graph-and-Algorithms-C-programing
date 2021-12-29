@@ -1,36 +1,38 @@
-#ifndef GRAPH_
-#define GRAPH_
+#pragma once
+#include <stdlib.h>
+#include "vertex.h"
 
-typedef struct GRAPH_NODE_ *pnode;;
+typedef struct _Graph {
+    vertex * _head;
+    size_t _size;
+}Graph;
 
-typedef struct edge_
-{
-    int weight;
-    pnode endpoint;
-    struct edge_ *next;
-} edge, *pedge;
+/*
+ * Allocates a new empty List.
+ * It's the user responsibility to free it with List_free.
+ */
+Graph* Graph_alloc();
 
-typedef struct GRAPH_NODE_
-{
-    int node_num;
-    pedge edges;
-    struct GRAPH_NODE_ *next;
-} node, *pnode;
+/*
+ * Frees the memory and resources allocated to list.
+ * If list==NULL does nothing (same as free).
+ */
+void Graph_free(Graph* list);
 
-typedef struct exist_
-{
-    int bool;
-    struct GRAPH_NODE_ *start;
-}exist, *pexist;
+/*
+ * Returns the number of elements in the list.
+ */
+size_t Graph_size(const Graph* list);
 
+/*
+ * Inserts an element in the begining of the list.
+ */
+void Graph_insertFirst(Graph* list, int data,int tag);
 
-pnode build_graph_cmd(int nodeSum);
-pnode del_graph(pnode head);
-pnode insert_node_cmd(pnode head);
-void delete_node_cmd(pnode *head);
-//void printGraph_cmd(pnode head); // for self debug
-void deleteGraph_cmd(pnode *head);
-void shortsPath_cmd(pnode head);
-void TSP_cmd(pnode head);
+/*
+ * Returns the list first data.
+ */
 
-#endif
+double Graph_firstData(const Graph* list);
+void Graph_insertFirst(Graph* list, int data,int tag);
+void insertLast(int data, Graph* list);
