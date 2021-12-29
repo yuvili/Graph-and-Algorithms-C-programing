@@ -25,7 +25,8 @@ typedef struct exist_
 
 
 pnode build_graph_cmd(int nodeSum);
-void insert_node_cmd(pnode *head);
+pnode del_graph(pnode head);
+pnode insert_node_cmd(pnode head);
 void delete_node_cmd(pnode *head);
 //void printGraph_cmd(pnode head); // for self debug
 void deleteGraph_cmd(pnode *head);

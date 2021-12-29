@@ -17,19 +17,23 @@ int main()
             char nodeSum;
             scanf(" %d", &nodeSum); // get the node number
             a.start = build_graph_cmd(nodeSum);
-            a.bol=1;
+            a.bol = 1;
         }
         else
         {
 
             // need to del all the graph by free all nodes and edges
-            // build_graph_cmd();
+            a.start = del_graph(a.start);
+            if (a.start == NULL)  //TODO: only for checking..
+            {
+                printf("DELETE SUCCSESFULLY")
+            }
         }
 
         break;
 
     case 'B':
-        insert_node_cmd();
+       a.start = insert_node_cmd(a.start); //pass the refer of the head i.e pointer to pointer
         break;
 
     case 'D':
