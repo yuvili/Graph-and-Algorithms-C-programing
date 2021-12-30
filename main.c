@@ -5,10 +5,29 @@ int main()
 {
     char func;
 
-//    A4n02533n20411n13702
+//    A 4 n 0 2 5 3 3 n 2 0 4 1 1 n 1 3 7 0 2
     scanf("%c" ,&func);
-    if(func == 'A'){
-        A();
+    switch (func)
+    {
+        case 'A':
+            A();
+            break;
+        case 'B':
+            insert_node_cmd();
+            break;
+
+        case 'D':
+            delete_node_cmd();
+            break;
+
+        case 'S':
+            shortsPath_cmd();
+            break;
+
+        case 'T':
+            TSP_cmd();
+            break;
     }
+
     return 0;
 }

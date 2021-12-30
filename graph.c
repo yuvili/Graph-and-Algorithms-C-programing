@@ -18,6 +18,10 @@ void Graph_free(Graph* list) {
         Node_free(p2);
     }
     free(list);
+    free(p1);
+    free(p2);
+    p1 = NULL;
+    p2 = NULL;
 }
 
 size_t Graph_size(const Graph* list) {

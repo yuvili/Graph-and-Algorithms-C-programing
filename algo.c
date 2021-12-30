@@ -1,11 +1,14 @@
 #include <stdio.h>
-#include <stdlib.h>
 #include "vertex.h"
 #include "graph.h"
 
 Graph *graph;
+int bool = 0;
 
 void A(){
+    if(bool == 1){
+        Graph_free(graph);
+    }
     int number_of_nodes;
     scanf("%d", &number_of_nodes);
     graph = Graph_alloc();
@@ -13,7 +16,10 @@ void A(){
     vertex *prev = NULL;
 
     for(int i = 0; i<=number_of_nodes; i++){
-        scanf("%d",&src);
+        char n;
+        if(scanf("%c",&n) == 'n'){
+            scanf("%d",&src);
+        }
 
         if(src == 0){
             Graph_insertFirst(graph,src,0);
@@ -37,4 +43,5 @@ void A(){
             }
         }
     }
+    bool = 1;
 }
