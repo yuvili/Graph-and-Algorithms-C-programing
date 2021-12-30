@@ -24,7 +24,7 @@ void Graph_free(Graph* list) {
     p2 = NULL;
 }
 
-size_t Graph_size(const Graph* list) {
+int Graph_size(const Graph* list) {
     return list->_size;
 }
 
@@ -38,7 +38,7 @@ void Graph_insertFirst(Graph* list, int data,int tag) {
 }
 
 void insertLast(int data, Graph* list) {
-    struct _vertex **p = &list->_head;
+    vertex **p= &list->_head;
     while(*p){
         p = &((*p)->next);
     }

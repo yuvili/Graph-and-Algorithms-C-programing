@@ -10,7 +10,7 @@ int main()
     switch (func)
     {
         case 'A':
-            A();
+            build_graph_cmd();
             break;
         case 'B':
             insert_node_cmd();

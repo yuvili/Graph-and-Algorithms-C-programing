@@ -3,8 +3,8 @@
 #include "vertex.h"
 
 typedef struct _Graph {
-    vertex * _head;
-    size_t _size;
+    pvertex _head;
+    int _size;
 }Graph;
 
 /*
@@ -22,7 +22,7 @@ void Graph_free(Graph* list);
 /*
  * Returns the number of elements in the list.
  */
-size_t Graph_size(const Graph* list);
+int Graph_size(const Graph* list);
 
 /*
  * Inserts an element in the begining of the list.
