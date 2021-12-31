@@ -1,8 +1,13 @@
 #include <stdlib.h>
+#include <stdio.h>
 #include "vertex.h"
 
 pedge edge_alloc(int src,int dest,int w, pedge next) {
     pedge edge1= (pedge)malloc(sizeof(edge));
+    if(edge1 == NULL){
+        printf("Memory not available");
+        exit(1);
+    }
     edge1->src= src;
     edge1->dest = dest;
     edge1->weight = w;
@@ -30,8 +35,12 @@ void Node_free(pvertex node) {
     p2 = NULL;
 }
 
-pvertex  add_node(int data, pvertex next) {
+pvertex add_node(int data, pvertex next) {
     pvertex p = (pvertex) malloc(sizeof(vertex));
+    if(p== NULL){
+        printf("Memory not available");
+        exit(1);
+    }
     p->id = data;
     p->tag = 0;
     p->edges = NULL;
@@ -44,7 +53,7 @@ void first_edge(pvertex v, int src, int dest, int w) {
 }
 
 void add_edge(int src, int dest, int w, pvertex v) {
-    struct _edge **p = &v->edges;
+    edge **p = &v->edges;
     while(*p){
         p = &((*p)->next);
     }
@@ -61,3 +70,26 @@ pvertex get_node(int id, pvertex head, int number_of_nodes){
     }
     return *p;
 }
+
+void del_in_edges(pvertex head, int id){
+    while (head != NULL){
+        pedge ed_head = head->edges;
+        pedge curr = head->edges;
+        pedge prev = NULL;
+        while (curr != NULL){
+            if(curr->dest == id){
+                if(curr == ed_head){
+                    head->edges = head->edges->next;
+                }
+                prev = curr->next;
+                free_edge(curr);
+                curr = prev;
+            }
+            else{
+                curr = curr->next;
+            }
+        }
+        head = head->next;
+    }
+}
+

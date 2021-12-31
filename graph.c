@@ -32,7 +32,7 @@ double Graph_firstData(const Graph* list) {
     return list->_head->id;
 }
 
-void Graph_insertFirst(Graph* list, int data,int tag) {
+void Graph_insertFirst(Graph* list, int data) {
     list->_head= add_node(data, list->_head);
     ++(list->_size);
 }
