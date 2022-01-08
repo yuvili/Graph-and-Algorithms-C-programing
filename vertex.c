@@ -74,22 +74,33 @@ pvertex get_node(int id, pvertex head, int number_of_nodes){
 void del_in_edges(pvertex head, int id){
     while (head != NULL){
         pedge ed_head = head->edges;
-        pedge curr = head->edges;
+        pedge *curr = &head->edges;
         pedge prev = NULL;
         while (curr != NULL){
-            if(curr->dest == id){
-                if(curr == ed_head){
+            if((*curr)->dest == id){
+                if((*curr) == ed_head){
                     head->edges = head->edges->next;
                 }
-                prev = curr->next;
-                free_edge(curr);
-                curr = prev;
+                prev = (*curr)->next;
+                free_edge((*curr));
+                curr = &prev;
             }
             else{
-                curr = curr->next;
+                curr = &(*curr)->next;
             }
         }
         head = head->next;
     }
+}
+
+pedge get_edge(pvertex src, int dest){
+    pedge *head = &src->edges;
+    while (head != NULL){
+        if((*head)->dest == dest){
+            return (*head);
+        }
+        head = &(*head)->next;
+    }
+    return NULL;
 }
 

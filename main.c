@@ -18,14 +18,14 @@ int main()
         case 'D':
             delete_node_cmd();
             break;
-//
-//        case 'S':
-//            shortsPath_cmd();
-//            break;
-//
-//        case 'T':
-//            TSP_cmd();
-//            break;
+
+        case 'S':
+            shortsPath_cmd();
+            break;
+
+        case 'T':
+            TSP_cmd();
+            break;
         default:
             printf("Error! operator is not correct");
     }

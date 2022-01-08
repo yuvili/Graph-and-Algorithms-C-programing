@@ -22,3 +22,4 @@ void first_edge(pvertex v, int src, int dest, int w);
 void add_edge(int src, int dest, int w, pvertex v);
 pvertex get_node(int id,pvertex head, int number_of_nodes);
 void del_in_edges(pvertex head, int id);
+pedge get_edge(pvertex src, int dest);
