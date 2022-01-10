@@ -89,7 +89,7 @@ void shortsPath_cmd(){
     scanf("%d", &dest);
 
     if(src == dest){
-        printf("Dijsktra shortest path: -1");
+        printf("Dijsktra shortest path: -1\n");
     }
 
     pvertex src_node = get_node(src,graph->_head);
@@ -116,7 +116,7 @@ void shortsPath_cmd(){
         int index = lowest_dist(arr);
 
         if(index == -1){
-            printf("Dijsktra shortest path: -1");
+            printf("Dijsktra shortest path: -1\n");
         }
         else{
             pvertex curr = get_node(index, graph->_head);
@@ -124,7 +124,7 @@ void shortsPath_cmd(){
             curr->tag = 1;
         }
     }
-    printf("Dijsktra shortest path: %d", arr[dest]);
+    printf("Dijsktra shortest path: %d\n", arr[dest]);
 }
 
 int shortsPath(int src, int dest){
@@ -215,7 +215,7 @@ void TSP_cmd() {
         list[i] = temp;
     }
     minimum_cost(list[0]);
-    printf("TSP shortest path: %d", cost);
+    printf("TSP shortest path: %d\n", cost);
 }
 
 void build_graph_cmd(){
