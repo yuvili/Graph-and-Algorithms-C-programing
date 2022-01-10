@@ -168,30 +168,48 @@ void TSP_cmd() {
         list[i] = temp;
     }
 
-    int startNode = list[0];
-    int currentNode = 0;
-    int dist_ans = 0;
-    int tempSPD;
-    int cost = INT_MAX;
-    int counter = 1;
+    if(len == 2){
+        int short1 = shortsPath(list[0], list[1]);
+        int short2 = shortsPath(list[1], list[0]);
 
-    while (counter != len) {
-        for (int i = 0; i < len; i++) {
-            if(list[i] != startNode){
-                tempSPD = shortsPath(startNode, list[i]);
+        if(short1 != INT_MAX && short1 != -1 && short1 < short2){
+            printf("TSP shortest path: %d \n", short1);
+        } else if(short2 != INT_MAX && short2 != -1  && short2 < short1){
+            printf("TSP shortest path: %d \n", short2);
+        }
+        else if(short2 != INT_MAX && short2 != -1 && short1 == -1){
+            printf("TSP shortest path: %d \n", short2);
+        }
+        else{
+            printf("TSP shortest path: -1 \n");
+        }
+    }
+    else {
+        int startNode = list[0];
+        int currentNode = 0;
+        int dist_ans = 0;
+        int tempSPD;
+        int cost = INT_MAX;
+        int counter = 1;
 
-                if (tempSPD < cost) {
-                    cost = tempSPD;
-                    currentNode = list[i];
+        while (counter != len) {
+            for (int i = 0; i < len; i++) {
+                if (list[i] != startNode) {
+                    tempSPD = shortsPath(startNode, list[i]);
+
+                    if (tempSPD < cost) {
+                        cost = tempSPD;
+                        currentNode = list[i];
+                    }
                 }
             }
+            dist_ans += cost;
+            cost = INT_MAX;
+            startNode = currentNode;
+            counter++;
         }
-        dist_ans += cost;
-        cost = INT_MAX;
-        startNode = currentNode;
-        counter++;
+        printf("TSP shortest path: %d \n", dist_ans);
     }
-    printf("TSP shortest path: %d \n", dist_ans);
 }
 
 void build_graph_cmd(){
