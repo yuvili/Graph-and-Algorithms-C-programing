@@ -20,6 +20,7 @@ void Node_free(pvertex node);
 pvertex add_node(int data, pvertex next);
 void first_edge(pvertex v, int src, int dest, int w);
 void add_edge(int src, int dest, int w, pvertex v);
-pvertex get_node(int id,pvertex head, int number_of_nodes);
+void set_tag(int id, pvertex head, int t);
+pvertex get_node(int id,pvertex head);
 void del_in_edges(pvertex head, int id);
 pedge get_edge(pvertex src, int dest);

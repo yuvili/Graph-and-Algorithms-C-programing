@@ -1,33 +1,21 @@
 #include <stdio.h>
 #include "algo.h"
 
-int main()
-{
+int main() {
+
     char func;
-
-//    A 4 n 0 2 5 3 3 n 2 0 4 1 1 n 1 3 7 0 2
-    scanf("%c" ,&func);
-    switch (func)
-    {
-        case 'A':
+    while (scanf("%c", &func) != EOF) {
+        if (func == 'A') {
             build_graph_cmd();
-            break;
-        case 'B':
+        } else if (func == 'B') {
             insert_node_cmd();
-            break;
-        case 'D':
+        } else if (func == 'D') {
             delete_node_cmd();
-            break;
-
-        case 'S':
+        } else if (func == 'S') {
             shortsPath_cmd();
-            break;
-
-        case 'T':
+        } else if(func == 'T'){
             TSP_cmd();
-            break;
-        default:
-            printf("Error! operator is not correct");
+        }
     }
 
     return 0;

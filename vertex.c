@@ -60,13 +60,18 @@ void add_edge(int src, int dest, int w, pvertex v) {
     *p = edge_alloc(src, dest, w,NULL);
 }
 
-pvertex get_node(int id, pvertex head, int number_of_nodes){
+void set_tag(int id, pvertex head, int t){
     vertex **p = &head;
     while(((*p)->id) != id){
         p = &((*p)->next);
     }
-    if(((*p)->id) == number_of_nodes-1){
-        return NULL;
+    (*p)->tag = t;
+}
+
+pvertex get_node(int id, pvertex head){
+    vertex **p = &head;
+    while(((*p)->id) != id){
+        p = &((*p)->next);
     }
     return *p;
 }
@@ -95,11 +100,11 @@ void del_in_edges(pvertex head, int id){
 
 pedge get_edge(pvertex src, int dest){
     pedge *head = &src->edges;
-    while (head != NULL){
+    while ((*head) != NULL){
         if((*head)->dest == dest){
-            return (*head);
+            return ((*head));
         }
-        head = &(*head)->next;
+        head = &((*head))->next;
     }
     return NULL;
 }
