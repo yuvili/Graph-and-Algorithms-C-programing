@@ -81,7 +81,7 @@ void Dijkstra_algorithm(int index, int dist[number_of_nodes], pvertex node) {
     }
 }
 
-int shortsPath_cmd(){
+void shortsPath_cmd(){
     int src;
     int dest;
 
@@ -89,7 +89,7 @@ int shortsPath_cmd(){
     scanf("%d", &dest);
 
     if(src == dest){
-        return -1;
+        printf("Dijsktra shortest path: -1");
     }
 
     pvertex src_node = get_node(src,graph->_head);
@@ -116,7 +116,7 @@ int shortsPath_cmd(){
         int index = lowest_dist(arr);
 
         if(index == -1){
-            return -1;
+            printf("Dijsktra shortest path: -1");
         }
         else{
             pvertex curr = get_node(index, graph->_head);
@@ -124,8 +124,7 @@ int shortsPath_cmd(){
             curr->tag = 1;
         }
     }
-    printf("%d", arr[dest]);
-    return arr[dest];
+    printf("Dijsktra shortest path: %d", arr[dest]);
 }
 
 int shortsPath(int src, int dest){
@@ -200,7 +199,6 @@ void minimum_cost(int city){
     near_node = tsp(city, number_of_nodes);
     if(near_node == INT_MAX){
         near_node = 0;
-        printf("%d", near_node + 1);
         cost += shortsPath(city,near_node);
         return;
     }
@@ -217,6 +215,7 @@ void TSP_cmd() {
         list[i] = temp;
     }
     minimum_cost(list[0]);
+    printf("TSP shortest path: %d", cost);
 }
 
 void build_graph_cmd(){
