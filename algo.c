@@ -89,7 +89,7 @@ void shortsPath_cmd(){
     scanf("%d", &dest);
 
     if(src == dest){
-        printf("Dijsktra shortest path: -1\n");
+        printf("Dijsktra shortest path: -1 \n");
     }
 
     pvertex src_node = get_node(src,graph->_head);
@@ -100,6 +100,7 @@ void shortsPath_cmd(){
     pvertex head = graph->_head;
 
     while(head != NULL) {
+        set_tag(head->id, graph->_head, 0);
         if (head->id != src) {
             pedge temp = get_edge(src_node, head->id);
             if(temp != NULL){
@@ -116,7 +117,7 @@ void shortsPath_cmd(){
         int index = lowest_dist(arr);
 
         if(index == -1){
-            printf("Dijsktra shortest path: -1\n");
+            printf("Dijsktra shortest path: -1 \n");
         }
         else{
             pvertex curr = get_node(index, graph->_head);
@@ -124,7 +125,7 @@ void shortsPath_cmd(){
             curr->tag = 1;
         }
     }
-    printf("Dijsktra shortest path: %d\n", arr[dest]);
+    printf("Dijsktra shortest path: %d \n", arr[dest]);
 }
 
 int shortsPath(int src, int dest){
@@ -140,6 +141,7 @@ int shortsPath(int src, int dest){
     pvertex head = graph->_head;
 
     while(head != NULL) {
+        set_tag(head->id, graph->_head, 0);
         if (head->id != src) {
             pedge temp = get_edge(src_node, head->id);
             if(temp != NULL){
@@ -158,51 +160,16 @@ int shortsPath(int src, int dest){
         if(index == -1){
             return -1;
         }
-        else{
+        else if(index != src){
             pvertex curr = get_node(index, graph->_head);
             Dijkstra_algorithm(index, arr, curr);
             curr->tag = 1;
+        } else{
+            pvertex curr = get_node(index, graph->_head);
+            curr->tag = 1;
         }
     }
-    printf("%d", arr[dest]);
     return arr[dest];
-}
-
-int cost = 0;
-
-int tsp(int c, int len){
-    int count, nearest_city = INT_MAX;
-    int minimum = INT_MAX, temp;
-    for(count = 0; count < len; count++){
-        int shortest = shortsPath(c,count);
-        if((shortest != 0) && (get_node(count, graph->_head)->tag == 0))
-        {
-            if(shortest < minimum)
-            {
-                minimum = shortsPath(count,0) + shortest;
-            }
-            temp = shortest;
-            nearest_city = count;
-        }
-    }
-    if(minimum != INT_MAX)
-    {
-        cost = cost + temp;
-    }
-    return nearest_city;
-}
-
-void minimum_cost(int city){
-    int near_node;
-    set_tag(city,graph->_head, 1);
-    printf("%d ", city + 1);
-    near_node = tsp(city, number_of_nodes);
-    if(near_node == INT_MAX){
-        near_node = 0;
-        cost += shortsPath(city,near_node);
-        return;
-    }
-    minimum_cost(near_node);
 }
 
 void TSP_cmd() {
@@ -214,8 +181,31 @@ void TSP_cmd() {
         scanf("%d", &temp);
         list[i] = temp;
     }
-    minimum_cost(list[0]);
-    printf("TSP shortest path: %d\n", cost);
+
+    int startNode = list[0];
+    int currentNode = 0;
+    int dist_ans = 0;
+    int tempSPD;
+    int cost = INT_MAX;
+    int counter = 1;
+
+    while (counter != len) {
+        for (int i = 0; i < len; i++) {
+            if(list[i] != startNode){
+                tempSPD = shortsPath(startNode, list[i]);
+
+                if (tempSPD < cost) {
+                    cost = tempSPD;
+                    currentNode = list[i];
+                }
+            }
+        }
+        dist_ans += cost;
+        cost = INT_MAX;
+        startNode = currentNode;
+        counter++;
+    }
+    printf("TSP shortest path: %d \n", dist_ans);
 }
 
 void build_graph_cmd(){
@@ -228,15 +218,13 @@ void build_graph_cmd(){
     pvertex prev = NULL;
 
     char n;
-    scanf(" %c", &n);
-    if (n == 110) {
+    while (scanf(" %c", &n) && n == 110) {
         scanf(" %d", &src);
 
         if (src == 0) {
             Graph_insertFirst(graph, src);
             prev = graph->_head;
-        }
-        else {
+        } else {
             insertLast(src, graph);
             prev = prev->next;
         }
@@ -250,21 +238,20 @@ void build_graph_cmd(){
             if (first == -1) {
                 first_edge(prev, src, dest, weight);
                 first = 0;
-            }
-            else {
+            } else {
                 add_edge(src, dest, weight, prev);
             }
         }
-    } else{
-        if (n == 'B') {
-            insert_node_cmd();
-        } else if (n == 'D') {
-            delete_node_cmd();
-        } else if (n == 'S') {
-            shortsPath_cmd();
-        } else if(n == 'T'){
-            TSP_cmd();
-        }
+    }
+
+    if (n == 'B') {
+        insert_node_cmd();
+    } else if (n == 'D') {
+        delete_node_cmd();
+    } else if (n == 'S') {
+        shortsPath_cmd();
+    } else if(n == 'T'){
+        TSP_cmd();
     }
     bool = 1;
 }
