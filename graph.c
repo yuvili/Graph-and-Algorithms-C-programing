@@ -18,18 +18,7 @@ void Graph_free(Graph* list) {
         Node_free(p2);
     }
     free(list);
-    free(p1);
-    free(p2);
-    p1 = NULL;
-    p2 = NULL;
-}
-
-int Graph_size(const Graph* list) {
-    return list->_size;
-}
-
-double Graph_firstData(const Graph* list) {
-    return list->_head->id;
+    list = NULL;
 }
 
 void Graph_insertFirst(Graph* list, int data) {

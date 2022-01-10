@@ -6,15 +6,16 @@
 Graph *graph;
 int number_of_nodes;
 int bool = 0;
+int distances[50][50];
 
 void insert_node_cmd() {
     int node_id;
     scanf("%d", &node_id);
     pvertex temp = get_node(node_id, graph->_head);
     if (temp == NULL) {
-        insertLast(node_id, graph);
-    } else {
-        Node_free(temp);
+        graph->_size++;
+        number_of_nodes++;
+
         insertLast(node_id, graph);
         pvertex curr = get_node(node_id, graph->_head);
         int dest;
@@ -25,9 +26,29 @@ void insert_node_cmd() {
             scanf("%d", &weight);
             if (first == -1) {
                 first_edge(curr, node_id, dest, weight);
+                distances[node_id][dest] = weight;
                 first = 0;
             } else {
                 add_edge(node_id, dest, weight, curr);
+                distances[node_id][dest] = weight;
+            }
+        }
+    } else {
+        free(temp->edges);
+        temp->edges = NULL;
+        int dest;
+        int weight;
+        int first = -1;
+
+        while (scanf("%d", &dest)) {
+            scanf("%d", &weight);
+            if (first == -1) {
+                first_edge(temp, node_id, dest, weight);
+                first = 0;
+                distances[node_id][dest] = weight;
+            } else {
+                add_edge(node_id, dest, weight, temp);
+                distances[node_id][dest] = weight;
             }
         }
     }
@@ -43,42 +64,83 @@ void delete_node_cmd(){
         temp = NULL;
     }
     else{
+        pvertex *p = &graph->_head;
+        while((*p)->next->id != id) {
+            p = &(*p)->next;
+        }
         pvertex node_to_del = get_node(id, graph->_head);
+        (*p)->next = node_to_del->next;
         Node_free(node_to_del);
         del_in_edges(graph->_head, id);
         node_to_del = NULL;
     }
 }
 
-int lowest_dist(int dist[number_of_nodes]){
+int lowest_dist(int src){
     int temp_dist = INT_MAX;
     int ans = -1;
-
-    for(int i = 0; i< graph->_size; i++){
-        pvertex current_node = get_node(i, graph->_head);
+    int i;
+    pvertex current_node =  graph->_head;
+    while(current_node != NULL){
+        i = current_node->id;
         if(current_node->tag == 0){
-            if(dist[i] < temp_dist){
-                temp_dist = dist[i];
+            if(distances[src][i] != -1 && distances[src][i] < temp_dist){
+                temp_dist = distances[src][i];
                 ans = i;
             }
         }
+        current_node = current_node->next;
     }
     return ans;
 }
 
-void Dijkstra_algorithm(int index, int dist[number_of_nodes], pvertex node) {
-    int distance = dist[index];
+void Dijkstra_algorithm(int index, int src, pvertex node) {
+    int distance = distances[src][index];
     pedge head = node->edges;
 
     while(head != NULL) {
         pvertex dest_node = get_node(head->dest, graph->_head);
         int new_dist = distance + head->weight;
 
-        if (new_dist < dist[dest_node->id]) {
-            dist[dest_node->id] = new_dist;
+        if (new_dist < distances[src][dest_node->id]) {
+            distances[src][dest_node->id] = new_dist;
         }
         head= head->next;
     }
+}
+
+int shortsPath(int src, int dest){
+    if(src == dest){
+        return -1;
+    }
+
+    pvertex tag_change = graph->_head;
+    while (tag_change != NULL){
+        tag_change->tag = 0;
+        tag_change = tag_change->next;
+    }
+
+    pvertex *temp_dest = &graph->_head;
+    while((*temp_dest)->id != dest){
+        temp_dest = &(*temp_dest)->next;
+    }
+
+    while((*temp_dest)->tag != 1){
+        int index = lowest_dist(src);
+
+        if(index == -1){
+            return -1;
+        }
+        else if(index != src){
+            pvertex curr = get_node(index, graph->_head);
+            Dijkstra_algorithm(index, src, curr);
+            curr->tag = 1;
+        } else{
+            pvertex curr = get_node(index, graph->_head);
+            curr->tag = 1;
+        }
+    }
+    return distances[src][dest];
 }
 
 void shortsPath_cmd(){
@@ -92,84 +154,8 @@ void shortsPath_cmd(){
         printf("Dijsktra shortest path: -1 \n");
     }
 
-    pvertex src_node = get_node(src,graph->_head);
-    pvertex dest_node = get_node(dest,graph->_head);
-    int arr[number_of_nodes];
-    arr[src] = -1;
-
-    pvertex head = graph->_head;
-
-    while(head != NULL) {
-        set_tag(head->id, graph->_head, 0);
-        if (head->id != src) {
-            pedge temp = get_edge(src_node, head->id);
-            if(temp != NULL){
-                arr[head->id] =  temp->weight;
-            }
-            else{
-                arr[head->id] = INT_MAX;
-            }
-        }
-        head = head->next;
-    }
-
-    while(dest_node->tag != 1){
-        int index = lowest_dist(arr);
-
-        if(index == -1){
-            printf("Dijsktra shortest path: -1 \n");
-        }
-        else{
-            pvertex curr = get_node(index, graph->_head);
-            Dijkstra_algorithm(index, arr, curr);
-            curr->tag = 1;
-        }
-    }
-    printf("Dijsktra shortest path: %d \n", arr[dest]);
-}
-
-int shortsPath(int src, int dest){
-    if(src == dest){
-        return -1;
-    }
-
-    pvertex src_node = get_node(src,graph->_head);
-    pvertex dest_node = get_node(dest,graph->_head);
-    int arr[number_of_nodes];
-    arr[src] = -1;
-
-    pvertex head = graph->_head;
-
-    while(head != NULL) {
-        set_tag(head->id, graph->_head, 0);
-        if (head->id != src) {
-            pedge temp = get_edge(src_node, head->id);
-            if(temp != NULL){
-                arr[head->id] =  temp->weight;
-            }
-            else{
-                arr[head->id] = INT_MAX;
-            }
-        }
-        head = head->next;
-    }
-
-    while(dest_node->tag != 1){
-        int index = lowest_dist(arr);
-
-        if(index == -1){
-            return -1;
-        }
-        else if(index != src){
-            pvertex curr = get_node(index, graph->_head);
-            Dijkstra_algorithm(index, arr, curr);
-            curr->tag = 1;
-        } else{
-            pvertex curr = get_node(index, graph->_head);
-            curr->tag = 1;
-        }
-    }
-    return arr[dest];
+    int ans = shortsPath(src,dest);
+    printf("Dijsktra shortest path: %d \n", ans);
 }
 
 void TSP_cmd() {
@@ -212,6 +198,16 @@ void build_graph_cmd(){
     if(bool == 1){
         Graph_free(graph);
     }
+    for (int i = 0; i < 50; i++){
+        for (int j = 0; j < 50; ++j) {
+            if (i==j){
+                distances[i][j] = -1;
+            } else{
+                distances[i][j] = INT_MAX;
+            }
+        }
+    }
+
     scanf("%d", &number_of_nodes);
     graph = Graph_alloc();
     int src;
@@ -238,8 +234,10 @@ void build_graph_cmd(){
             if (first == -1) {
                 first_edge(prev, src, dest, weight);
                 first = 0;
+                distances[src][dest] = weight;
             } else {
                 add_edge(src, dest, weight, prev);
+                distances[src][dest] = weight;
             }
         }
     }
@@ -253,5 +251,6 @@ void build_graph_cmd(){
     } else if(n == 'T'){
         TSP_cmd();
     }
+
     bool = 1;
 }

@@ -4,7 +4,7 @@
 int main() {
 
     char func;
-    while (scanf("%c", &func) != EOF) {
+    while (scanf(" %c", &func) != EOF) {
         if (func == 'A') {
             build_graph_cmd();
         } else if (func == 'B') {
