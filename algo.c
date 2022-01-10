@@ -158,58 +158,77 @@ void shortsPath_cmd(){
     printf("Dijsktra shortest path: %d \n", ans);
 }
 
-void TSP_cmd() {
-    int len;
-    scanf("%d", &len);
-    int list[len];
-    for (int i = 0; i < len; ++i) {
+int weight = INT_MAX;
+int size = -1;
+
+void swap(int *a, int *b)
+{
+    int tmp = *a;
+    *a = *b;
+    *b = tmp;
+}
+
+void calculateWeight(int *arr){
+    int tempWeight = 0;
+    for (int i = 0; i < size - 1; i++){
+        int dis = shortsPath( arr[i], arr[i + 1]);
+        if (dis == -1){
+            tempWeight = INT_MAX;
+            return;
+        }
+        tempWeight += dis;
+    }
+    if (tempWeight < weight)
+    {
+        weight = tempWeight;
+    }
+}
+
+int *copyList(int *list){
+    int *copy = (int *)malloc(sizeof(int) * size);
+    if(copy == NULL){
+        return NULL;
+    }
+    int i = 0;
+    while (i<size){
+        copy[i] = list[i];
+        i++;
+    }
+    return copy;
+}
+
+void allPaths(int first, int *arr){
+    if (first == size - 1)
+    {
+        calculateWeight(arr);
+        return;
+    }
+    for (int i = first; i < size; ++i)
+    {
+        int *copy = copyList(arr);
+        swap(&copy[first], &copy[i]);
+        allPaths(first + 1, copy);
+        free(copy);
+        copy = NULL;
+    }
+}
+
+void TSP_cmd(){
+    scanf("%d", &size);
+    int list[size];
+    for (int i = 0; i < size; ++i) {
         int temp;
         scanf("%d", &temp);
         list[i] = temp;
     }
 
-    if(len == 2){
-        int short1 = shortsPath(list[0], list[1]);
-        int short2 = shortsPath(list[1], list[0]);
-
-        if(short1 != INT_MAX && short1 != -1 && short1 < short2){
-            printf("TSP shortest path: %d \n", short1);
-        } else if(short2 != INT_MAX && short2 != -1  && short2 < short1){
-            printf("TSP shortest path: %d \n", short2);
-        }
-        else if(short2 != INT_MAX && short2 != -1 && short1 == -1){
-            printf("TSP shortest path: %d \n", short2);
-        }
-        else{
-            printf("TSP shortest path: -1 \n");
-        }
+    allPaths(0, list);
+    if(weight == INT_MAX){
+        weight = -1;
     }
-    else {
-        int startNode = list[0];
-        int currentNode = 0;
-        int dist_ans = 0;
-        int tempSPD;
-        int cost = INT_MAX;
-        int counter = 1;
-
-        while (counter != len) {
-            for (int i = 0; i < len; i++) {
-                if (list[i] != startNode) {
-                    tempSPD = shortsPath(startNode, list[i]);
-
-                    if (tempSPD < cost) {
-                        cost = tempSPD;
-                        currentNode = list[i];
-                    }
-                }
-            }
-            dist_ans += cost;
-            cost = INT_MAX;
-            startNode = currentNode;
-            counter++;
-        }
-        printf("TSP shortest path: %d \n", dist_ans);
-    }
+    printf("TSP shortest path: %d \n", weight);
+    weight = INT_MAX;
+    size = -1;
 }
 
 void build_graph_cmd(){
@@ -272,3 +291,4 @@ void build_graph_cmd(){
 
     bool = 1;
 }
+
